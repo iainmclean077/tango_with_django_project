@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from rango.models import Category, Page
-from rango.forms import CategoryForm
+from rango.forms import CategoryForm, PageForm
+from django.core.urlresolvers import reverse
 
 def index(request):
     # Query the database for a list of ALL categories currently stored.
@@ -49,9 +50,10 @@ def add_category(request):
     if request.method == 'POST':
         form = CategoryForm(request.POST)
 
-        if form.is_valid() and form != None:
+        if form.is_valid():
             #if error needing to print category, add in "cat = .."
-            form.save(commit=True)
+            category = form.save(commit=True)
+            print(category, category.slug)
             return index(request)
         else:
             print(form.errors)
